@@ -12,3 +12,6 @@
 **/.mvn
 **/target/
 .idea
+**/application-local.yaml
+**/application-dev.yaml
+/logs/
