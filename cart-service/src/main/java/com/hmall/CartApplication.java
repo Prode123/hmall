@@ -10,7 +10,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Data 2025/03/09 18:09
  */
 
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.hmall.api.client")
 @MapperScan("com.hmall.cart.mapper")
 @SpringBootApplication
 public class CartApplication {
