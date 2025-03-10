@@ -3,6 +3,8 @@ package com.hmall.cart.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hmall.api.client.ItemClient;
+import com.hmall.api.dto.ItemDTO;
 import com.hmall.cart.domain.dto.CartFormDTO;
 import com.hmall.cart.domain.po.Cart;
 import com.hmall.cart.domain.vo.CartVO;
@@ -34,7 +36,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart> implements ICartService {
 
-//    private final IItemService itemService;
+//    private final RestTemplate restTemplate;
+//
+//    private final DiscoveryClient discoveryClient;
+
+    private final ItemClient itemService;
 @Override
 public void addItem2Cart(CartFormDTO cartFormDTO) {
     // 1.获取登录用户
@@ -74,12 +80,31 @@ public void addItem2Cart(CartFormDTO cartFormDTO) {
     }
 
     private void handleCartItems(List<CartVO> vos) {
-        // 1.获取商品id TODO 处理商品信息
-        /*Set<Long> itemIds = vos.stream().map(CartVO::getItemId).collect(Collectors.toSet());
+        // TODO 1.获取商品id
+        Set<Long> itemIds = vos.stream().map(CartVO::getItemId).collect(Collectors.toSet());
         // 2.查询商品
+        // List<ItemDTO> items = itemService.queryItemByIds(itemIds);
+        // 2.1.发现item-service服务的实例列表
+//        List<ServiceInstance> instances = discoveryClient.getInstances("item-service");
+//        //2.2.使用随机负载均衡挑选一个实例
+//        ServiceInstance instance = instances.get(RandomUtil.randomInt(instances.size()));
+//        ResponseEntity<List<ItemDTO>> response = restTemplate.exchange(
+//                instance.getUri() + "/items?ids={ids}",
+//                HttpMethod.GET,
+//                null,
+//                new ParameterizedTypeReference<List<ItemDTO>>() {
+//                },
+//                Map.of("ids", CollUtil.join(itemIds, ","))
+//        );
+//        // 2.2.解析响应
+//        if(!response.getStatusCode().is2xxSuccessful()){
+//            // 查询失败，直接结束
+//            return;
+//        }
+//        List<ItemDTO> items = response.getBody();
         List<ItemDTO> items = itemService.queryItemByIds(itemIds);
         if (CollUtils.isEmpty(items)) {
-            throw new BadRequestException("购物车中商品不存在！");
+            return;
         }
         // 3.转为 id 到 item的map
         Map<Long, ItemDTO> itemMap = items.stream().collect(Collectors.toMap(ItemDTO::getId, Function.identity()));
@@ -92,7 +117,7 @@ public void addItem2Cart(CartFormDTO cartFormDTO) {
             v.setNewPrice(item.getPrice());
             v.setStatus(item.getStatus());
             v.setStock(item.getStock());
-        }*/
+        }
     }
 
     @Override
