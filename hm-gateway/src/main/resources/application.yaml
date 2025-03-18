@@ -1,11 +1,7 @@
 server:
   port: 8080
 spring:
-  application:
-    name: gateway
   cloud:
-    nacos:
-      server-addr: 123.56.181.42:8848
     gateway:
       routes:
         - id: item # 路由规则id，自定义，唯一

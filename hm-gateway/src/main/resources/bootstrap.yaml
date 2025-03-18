@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: pay-service # 服务名称
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      server-addr: 123.56.181.42 # nacos地址
